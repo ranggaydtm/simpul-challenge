@@ -3,7 +3,7 @@ import { AppBar, Box, Container, Grid, IconButton, InputAdornment, OutlinedInput
 import { ForumOutlined, ChromeReaderModeOutlined, ShowChart, Search } from "@mui/icons-material";
 import { useState } from "react";
 import Inbox from "./components/inbox/Inbox";
-import Task from "./components/task/Task";
+import TaskManager from "./components/task/TaskManager";
 
 function App() {
   const [click, setClick] = useState(false);
@@ -20,7 +20,7 @@ function App() {
   return (
     <>
       {modal === "inbox" && <Inbox open={modal === "inbox"} close={handleClose} />}
-      {modal === "task" && <Task open={modal === "task"} close={handleClose} />}
+      {modal === "task" && <TaskManager open={modal === "task"} close={handleClose} />}
       <Container maxWidth={false} sx={{ height: "100dvh", backgroundColor: "#0F8A69" }}>
         <Box
           sx={{
