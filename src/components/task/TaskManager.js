@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import { Box, Button, CircularProgress, Container, FormControl, MenuItem, Modal, Select, Stack, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, FormControl, MenuItem, Modal, Select, Stack, Typography } from "@mui/material";
 import { boxStyle } from "../../theme";
 import { useEffect, useState } from "react";
 import { getAllTask } from "../../services";
@@ -14,11 +14,8 @@ function TaskManager({ open, close }) {
     setLoading(true);
     try {
       const res = await getAllTask();
-      setList(res.data);
-      console.log(list);
-      console.log(res.data);
-      if (res.status === "success") {
-        console.log(list);
+      if (res.data) {
+        setList(res.data.task);
       }
     } catch (err) {
       console.log(err);
@@ -29,27 +26,27 @@ function TaskManager({ open, close }) {
 
   useEffect(() => {
     fetchTask();
-  }, [open]);
+  }, []);
 
   return (
     <>
       <Modal open={open} onClose={close} closeAfterTransition>
         <Box sx={boxStyle}>
-          <Stack direction="row" justifyContent="space-between" sx={{ width: "100%" }}>
+          <Stack direction="row" justifyContent="space-between" sx={{ width: "100%", height: "40px" }}>
             <FormControl>
-              <Select defaultValue={1} sx={{ width: "150px" }}>
+              <Select size="small" defaultValue={1} sx={{ width: "150px" }}>
                 <MenuItem value={1}>My Task</MenuItem>
                 <MenuItem value={2}>Personal Errands</MenuItem>
                 <MenuItem value={3}>Urgent To-Do</MenuItem>
               </Select>
             </FormControl>
-            <Button size="small" variant="contained">
+            <Button size="large" variant="contained" sx={{ textTransform: "none", borderRadius: "8px", padding: "2px 16px" }}>
               New Task
             </Button>
           </Stack>
 
           {!loading ? (
-            <></>
+            <>{list && list.map((row) => <TaskItem title={row?.title} daysLeft={row?.daysLeft} dueDate={row?.dueDate} description={row?.description} finish={row?.finished} />)}</>
           ) : (
             <>
               <Stack direction="column" spacing={2} sx={{ backgroundColor: "", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -58,25 +55,6 @@ function TaskManager({ open, close }) {
               </Stack>
             </>
           )}
-          {/* {list && list.length > 0 ? (
-            list.map((row, index) => (
-              <Container key={index}>
-                <TaskItem title={row?.title} dueDate={row?.dueDate} daysLeft={row?.daysLeft} description={row?.description} />
-              </Container>
-            ))
-          ) : (
-            <Typography variant="caption" fontSize="16px">
-              No Tasks Available
-            </Typography>
-          )} */}
-          {/* {list &&
-            list.map((row, index) => (
-              <>
-                <Container key={index}>
-                  <TaskItem title={row?.title} dueDate={row?.dueDate} daysLeft={row?.daysLeft} description={row?.description} />
-                </Container>
-              </>
-            ))} */}
         </Box>
       </Modal>
     </>
